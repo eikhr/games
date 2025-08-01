@@ -15,3 +15,21 @@
 .button:hover {
 	background-color: #edc94b;
 }
+
+.button.yellow {
+	background-color: #ffcb0c;
+	color: #242424;
+}
+
+.button.yellow:hover {
+	background-color: #f2d66b;
+}
+
+.button.secondary {
+	background-color: #504a43;
+	color: #faf8f1;
+}
+
+.button.secondary:hover {
+	background-color: #6b5f54;
+}

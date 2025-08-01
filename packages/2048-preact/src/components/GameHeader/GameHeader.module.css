@@ -1,6 +1,7 @@
 .container {
 	display: grid;
 	grid-template-areas: "title score" "title controls";
+	gap: 20px;
 }
 
 .title {
@@ -13,8 +14,12 @@
 	background-color: #efbd10;
 	color: white;
 	border-radius: 10px;
-	padding: 12px 20px;
+	padding: 15px;
 	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	aspect-ratio: 1 / 1;
 }
 
 .mainTitle {
@@ -34,10 +39,7 @@
 	display: flex;
 	justify-content: flex-end;
 	align-items: flex-start;
-}
-
-.score > * {
-	margin-right: 10px;
+	gap: 20px;
 }
 
 .controls {

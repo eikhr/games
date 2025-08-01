@@ -9,8 +9,8 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"preact": "catalog:",
-		"2048-preact": "workspace:*"
+		"2048-preact": "workspace:*",
+		"preact": "catalog:"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.10.2",

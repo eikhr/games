@@ -1,0 +1,168 @@
+.container {
+	position: relative;
+	--padding: 1.5%;
+	width: 100%;
+	background-color: #bbac9f;
+	border-radius: 3%;
+	box-shadow: 0 0 10px #ccc;
+	padding: var(--padding);
+	box-sizing: border-box;
+}
+
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	border-radius: 3%;
+	overflow: hidden;
+	animation: overlay_fade 1.5s linear;
+}
+
+.board {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.tile {
+	position: absolute;
+	width: var(--tile-width);
+	height: var(--tile-height);
+	--background: #000;
+	--color: #fff4cc;
+	z-index: 3;
+
+	padding: var(--padding);
+	box-sizing: border-box;
+
+	font-size: 300%;
+	font-weight: bold;
+	font-family: "Brush Script MT", cursive;
+}
+
+.tile > div {
+	width: 100%;
+	height: 100%;
+	border-radius: 10%;
+	background: var(--background);
+	color: var(--color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.tile.empty {
+	z-index: 1;
+	--background: rgba(238, 228, 218, 0.35);
+}
+
+.tile.empty > div {
+	box-shadow: none;
+}
+
+.tile.ghost {
+	z-index: 2;
+}
+
+.tile.new {
+	animation: tile_spawned 0.3s cubic-bezier(1, 0, 0.4, 1.5);
+}
+
+.tile.merged {
+	animation: merged_into 0.3s ease-in-out;
+}
+
+.tile.value_2 {
+	--background: #eee4da;
+	--color: #504a43;
+	font-size: 400%;
+}
+
+.tile.value_4 {
+	--background: #eee1c9;
+	--color: #504a43;
+	font-size: 400%;
+}
+
+.tile.value_8 {
+	--background: #f3b27a;
+	font-size: 400%;
+}
+
+.tile.value_16 {
+	--background: #f69664;
+	font-size: 400%;
+}
+
+.tile.value_32 {
+	--background: #f77c5f;
+	font-size: 400%;
+}
+
+.tile.value_64 {
+	--background: #f75f3b;
+	font-size: 400%;
+}
+
+.tile.value_128 {
+	--background: #edd073;
+	font-size: 350%;
+}
+
+.tile.value_256 {
+	--background: #edcc62;
+	font-size: 350%;
+}
+
+.tile.value_512 {
+	--background: #edc950;
+	font-size: 350%;
+}
+
+.tile.value_1024 {
+	--background: #edc53f;
+}
+
+.tile.value_2048 {
+	--background: #edc22e;
+}
+
+@keyframes overlay_fade {
+	0% {
+		opacity: 0;
+	}
+	40% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes tile_spawned {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes merged_into {
+	0% {
+		transform: scale(1);
+	}
+	33% {
+		transform: scale(1);
+	}
+	66% {
+		transform: scale(1.15);
+	}
+	100% {
+		transform: scale(1);
+	}
+}

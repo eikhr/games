@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"2048-logic": "workspace:*",
+		"classnames": "^2.5.1",
 		"preact": "catalog:"
 	},
 	"devDependencies": {

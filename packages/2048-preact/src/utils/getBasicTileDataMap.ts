@@ -1,5 +1,5 @@
 import type { Board } from '2048-logic';
-import type { BaseTileData } from '../boardTypes.js';
+import type { BaseTileData } from './getTileData.js';
 
 const getBasicTileDataMap = (board: Board): Map<number, BaseTileData> => {
 	const tileDataMap = new Map<number, BaseTileData>();

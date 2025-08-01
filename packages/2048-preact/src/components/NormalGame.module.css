@@ -1,0 +1,22 @@
+.overlay {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.overlay > h1 {
+	margin: 0;
+}
+
+.win {
+	background: rgb(237, 194, 46, 0.3);
+	box-shadow: inset 0 0 100px 0 #edc22e;
+}
+
+.lose {
+	background: rgba(0, 0, 0, 0.3);
+	color: #efe7d1;
+}

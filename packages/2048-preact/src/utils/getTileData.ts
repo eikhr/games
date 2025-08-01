@@ -1,6 +1,38 @@
 import type { Board } from '2048-logic';
-import type { TileData } from '../boardTypes.js';
 import getBasicTileDataMap from './getBasicTileDataMap.js';
+
+export interface Position {
+	row: number;
+	col: number;
+}
+
+export interface BaseTileData {
+	id?: number;
+	value: number;
+	position: Position;
+	ghost?: boolean;
+	previousValue?: number;
+	previousPosition?: Position;
+}
+
+interface NewTileData extends BaseTileData {
+	ghost: false;
+}
+
+interface MovedTileData extends BaseTileData {
+	ghost: false;
+	previousValue: number;
+	previousPosition: Position;
+}
+
+interface GhostTileData extends BaseTileData {
+	ghost: true;
+	previousPosition: Position;
+}
+
+export type TileData = (NewTileData | MovedTileData | GhostTileData) & {
+	id: number;
+};
 
 const getTileData = (board: Board, prevBoard?: Board): TileData[] => {
 	const prevTileDataMap = prevBoard
