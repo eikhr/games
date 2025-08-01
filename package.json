@@ -1,0 +1,28 @@
+{
+	"name": "root",
+	"type": "module",
+	"version": "0.0.0",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/eikhr/games.git"
+	},
+	"scripts": {
+		"format": "pnpm run format:code && pnpm run format:imports",
+		"format:code": "biome format --write",
+		"format:imports": "biome check --formatter-enabled=false --write",
+		"lint": "pnpm exec biome lint",
+		"lint:fix": "pnpm exec biome lint --write"
+	},
+	"workspaces": [
+		"packages/*",
+		"examples/*"
+	],
+	"engines": {
+		"node": ">=22.0.0"
+	},
+	"packageManager": "pnpm@10.5.1",
+	"devDependencies": {
+		"@biomejs/biome": "2.1.3"
+	}
+}
