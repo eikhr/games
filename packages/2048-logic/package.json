@@ -1,0 +1,12 @@
+{
+	"name": "2048-logic",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"random-seed": "^0.3.0"
+	},
+	"devDependencies": {
+		"@types/random-seed": "^0.3.5"
+	}
+}

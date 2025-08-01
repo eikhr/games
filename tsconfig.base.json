@@ -1,0 +1,17 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"strict": true,
+		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"module": "NodeNext",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"verbatimModuleSyntax": true,
+		"stripInternal": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true
+	}
+}
