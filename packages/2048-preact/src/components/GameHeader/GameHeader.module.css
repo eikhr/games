@@ -1,0 +1,48 @@
+.container {
+	display: grid;
+	grid-template-areas: "title score" "title controls";
+}
+
+.title {
+	grid-area: title;
+	display: flex;
+	align-items: flex-start;
+}
+
+.titleContainer {
+	background-color: #efbd10;
+	color: white;
+	border-radius: 10px;
+	padding: 12px 20px;
+	text-align: center;
+}
+
+.mainTitle {
+	font-family: "Brush Script MT", cursive;
+	font-size: 3rem;
+	font-weight: bold;
+}
+
+.subTitle {
+	font-family: "Tahoma", sans-serif;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.score {
+	grid-area: score;
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
+}
+
+.score > * {
+	margin-right: 10px;
+}
+
+.controls {
+	padding: 15px 0;
+	grid-area: controls;
+	display: flex;
+	justify-content: flex-end;
+}

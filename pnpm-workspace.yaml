@@ -3,3 +3,5 @@ packages:
   - examples/**/*
 onlyBuiltDependencies:
   - esbuild
+catalog:
+  preact: ^10.26.9

@@ -1,0 +1,19 @@
+{
+	"name": "2048-preact",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.tsx",
+			"import": "./src/index.tsx"
+		}
+	},
+	"dependencies": {
+		"2048-logic": "workspace:*",
+		"preact": "catalog:"
+	},
+	"devDependencies": {
+		"typescript-plugin-css-modules": "^5.2.0"
+	}
+}
