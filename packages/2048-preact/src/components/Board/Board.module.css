@@ -25,6 +25,7 @@
 	position: relative;
 	width: 100%;
 	height: 100%;
+	font-size: 3rem;
 }
 
 .tile {
@@ -79,48 +80,48 @@
 .tile.value_2 {
 	--background: #eee4da;
 	--color: #504a43;
-	font-size: 400%;
+	font-size: 150%;
 }
 
 .tile.value_4 {
 	--background: #eee1c9;
 	--color: #504a43;
-	font-size: 400%;
+	font-size: 150%;
 }
 
 .tile.value_8 {
 	--background: #f3b27a;
-	font-size: 400%;
+	font-size: 150%;
 }
 
 .tile.value_16 {
 	--background: #f69664;
-	font-size: 400%;
+	font-size: 150%;
 }
 
 .tile.value_32 {
 	--background: #f77c5f;
-	font-size: 400%;
+	font-size: 150%;
 }
 
 .tile.value_64 {
 	--background: #f75f3b;
-	font-size: 400%;
+	font-size: 150%;
 }
 
 .tile.value_128 {
 	--background: #edd073;
-	font-size: 350%;
+	font-size: 120%;
 }
 
 .tile.value_256 {
 	--background: #edcc62;
-	font-size: 350%;
+	font-size: 120%;
 }
 
 .tile.value_512 {
 	--background: #edc950;
-	font-size: 350%;
+	font-size: 120%;
 }
 
 .tile.value_1024 {
@@ -164,5 +165,11 @@
 	}
 	100% {
 		transform: scale(1);
+	}
+}
+
+@media (max-width: 500px) {
+	.board {
+		font-size: 2rem;
 	}
 }

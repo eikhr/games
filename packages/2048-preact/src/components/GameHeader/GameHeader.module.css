@@ -1,5 +1,6 @@
 .container {
 	display: grid;
+	overflow: auto;
 	grid-template-areas: "title score" "title controls";
 	gap: 20px;
 }
@@ -47,4 +48,23 @@
 	grid-area: controls;
 	display: flex;
 	justify-content: flex-end;
+}
+
+@media (max-width: 500px) {
+	.titleContainer {
+		padding: 10px;
+	}
+	.mainTitle {
+		font-size: 2.5rem;
+	}
+	.subTitle {
+		font-size: 0.9rem;
+	}
+
+	.container {
+		gap: 10px;
+	}
+	.score {
+		gap: 10px;
+	}
 }
