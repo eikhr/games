@@ -1,5 +1,6 @@
-import type { Board } from '2048-logic';
+import { type Board, Direction } from '2048-logic';
 import type { ComponentChildren, FunctionComponent } from 'preact';
+import { useSwipeable } from 'react-swipeable';
 import { usePrevious } from '../../hooks/usePrevious.js';
 import getTileData from '../../utils/getTileData.js';
 import styles from './Board.module.css';
@@ -8,11 +9,20 @@ import { EmptyTile, Tile } from './Tile.js';
 interface Props {
 	boardState: Board;
 	overlay: ComponentChildren;
+	onSwipe?: (direction: Direction) => void;
 }
+
+const swipeDirectionMap = {
+	Up: Direction.UP,
+	Down: Direction.DOWN,
+	Left: Direction.LEFT,
+	Right: Direction.RIGHT,
+};
 
 export const BoardComponent: FunctionComponent<Props> = ({
 	boardState,
 	overlay,
+	onSwipe,
 }) => {
 	const previousBoardState = usePrevious(boardState);
 	const tileData = getTileData(boardState, previousBoardState);
@@ -22,6 +32,11 @@ export const BoardComponent: FunctionComponent<Props> = ({
 	const tileWidth = `${100 / cols}%`;
 	const tileHeight = `${100 / rows}%`;
 
+	const swipeHandlers = useSwipeable({
+		onSwiping: (eventData) => onSwipe?.(swipeDirectionMap[eventData.dir]),
+		preventScrollOnSwipe: true,
+	});
+
 	return (
 		<div
 			className={styles.container}
@@ -30,6 +45,7 @@ export const BoardComponent: FunctionComponent<Props> = ({
 				'--tile-width': tileWidth,
 				'--tile-height': tileHeight,
 			}}
+			{...swipeHandlers}
 		>
 			{overlay && <div className={styles.overlay}>{overlay}</div>}
 			<div className={styles.board}>

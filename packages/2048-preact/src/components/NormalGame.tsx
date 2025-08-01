@@ -38,6 +38,7 @@ export const NormalGame = () => {
 						<LoseOverlay resetGame={resetGame} />
 					) : undefined
 				}
+				onSwipe={game.move}
 			/>
 		</div>
 	);
