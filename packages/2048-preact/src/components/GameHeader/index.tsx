@@ -4,10 +4,15 @@ import styles from './GameHeader.module.css';
 
 interface Props {
 	score: number;
+	highScore: number;
 	controls: ComponentChildren;
 }
 
-const GameHeader: FunctionComponent<Props> = ({ score, controls }) => {
+const GameHeader: FunctionComponent<Props> = ({
+	score,
+	highScore,
+	controls,
+}) => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.title}>
@@ -17,7 +22,7 @@ const GameHeader: FunctionComponent<Props> = ({ score, controls }) => {
 				</div>
 			</div>
 			<div className={styles.score}>
-				<ScoreBox label="High Score" score={score} />
+				<ScoreBox label="High Score" score={highScore} />
 				<ScoreBox label="Score" score={score} />
 			</div>
 			<div className={styles.controls}>{controls}</div>
