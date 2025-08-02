@@ -1,4 +1,11 @@
 import { type Board, Direction, mergeBoard } from '2048-logic';
+import cx from 'classnames';
+import {
+	ChevronDown,
+	ChevronLeft,
+	ChevronRight,
+	ChevronUp,
+} from 'lucide-react';
 import type { ComponentChildren, FunctionComponent } from 'preact';
 import { useMemo, useRef, useState } from 'preact/hooks';
 import { type SwipeEventData, useSwipeable } from 'react-swipeable';
@@ -28,6 +35,13 @@ const swipeDirectionMap = {
 	Down: Direction.DOWN,
 	Left: Direction.LEFT,
 	Right: Direction.RIGHT,
+};
+
+const directionIcon = {
+	[Direction.UP]: <ChevronUp />,
+	[Direction.DOWN]: <ChevronDown />,
+	[Direction.LEFT]: <ChevronLeft />,
+	[Direction.RIGHT]: <ChevronRight />,
 };
 
 export const BoardComponent: FunctionComponent<Props> = ({
@@ -92,6 +106,18 @@ export const BoardComponent: FunctionComponent<Props> = ({
 			{...swipeHandlers}
 		>
 			{overlay && <div className={styles.overlay}>{overlay}</div>}
+			{currentSwipe &&
+				((currentSwipeDir === Direction.UP && currentSwipe.deltaY < -50) ||
+					(currentSwipeDir === Direction.DOWN && currentSwipe.deltaY > 50) ||
+					(currentSwipeDir === Direction.LEFT && currentSwipe.deltaX < -50) ||
+					(currentSwipeDir === Direction.RIGHT &&
+						currentSwipe.deltaX > 50)) && (
+					<div className={cx(styles.overlay, styles.swipeHintOverlay)}>
+						<div className={styles.swipeHint}>
+							{directionIcon[currentSwipeDir]}
+						</div>
+					</div>
+				)}
 			<div ref={ref} className={styles.board}>
 				{
 					/* Render empty tiles for the board */

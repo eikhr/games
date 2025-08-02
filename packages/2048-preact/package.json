@@ -12,6 +12,7 @@
 	"dependencies": {
 		"2048-logic": "workspace:*",
 		"classnames": "^2.5.1",
+		"lucide-react": "^0.536.0",
 		"preact": "catalog:",
 		"react-swipeable": "^7.0.2"
 	},

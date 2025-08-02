@@ -21,6 +21,30 @@
 	animation: overlay_fade 1.5s linear;
 }
 
+.swipeHintOverlay {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: overlay_fade 0.5s linear;
+	/*transition: opacity 0.3s ease-in-out;*/
+	/*opacity: 0;*/
+}
+
+.swipeHint {
+	z-index: 20;
+	height: 50px;
+	width: 50px;
+	background: rgba(26, 26, 26, 0.5);
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.swipeHint svg {
+	color: #fff;
+}
+
 .board {
 	position: relative;
 	width: 100%;
@@ -137,6 +161,15 @@
 		opacity: 0;
 	}
 	40% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes fade {
+	0% {
 		opacity: 0;
 	}
 	100% {
