@@ -2,15 +2,18 @@ import cx from 'classnames';
 import type { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { TileData } from '../../utils/getTileData.js';
+import type { OngoingSwipe } from './Board.js';
 import styles from './Board.module.css';
 
 type Props = {
 	data: TileData;
 	tileHeight: string;
 	tileWidth: string;
+	ongoingSwipe?: OngoingSwipe;
 };
 
-export const Tile = ({ data, tileHeight, tileWidth }: Props) => {
+export const Tile = ({ data, tileHeight, tileWidth, ongoingSwipe }: Props) => {
+	const [animating, setAnimating] = useState(false);
 	const prevTop = `calc(${tileHeight} * ${(data.previousPosition ?? data.position).row})`;
 	const prevLeft = `calc(${tileWidth} * ${(data.previousPosition ?? data.position).col})`;
 	const currentTop = `calc(${tileHeight} * ${data.position.row})`;
@@ -29,22 +32,56 @@ export const Tile = ({ data, tileHeight, tileWidth }: Props) => {
 	});
 
 	useEffect(() => {
-		// snap to the previous position if old animation is still running
+		if (!ongoingSwipe) {
+			setStyle({
+				transition: 'top 0.2s ease, left 0.2s ease',
+				top: currentTop,
+				left: currentLeft,
+			});
+			return;
+		}
 		setStyle({
-			animation: isNew ? undefined : 'none',
-			transition: '',
-			top: prevTop,
-			left: prevLeft,
+			animation: 'none',
+			top: `clamp(${ongoingSwipe.minY}, calc(${currentTop} + ${ongoingSwipe.offsetY ?? '0'}), ${ongoingSwipe.maxY})`,
+			left: `clamp(${ongoingSwipe.minX}, calc(${currentLeft} + ${ongoingSwipe.offsetX ?? '0'}), ${ongoingSwipe.maxX})`,
 		});
+	}, [
+		ongoingSwipe?.minY,
+		ongoingSwipe?.minX,
+		ongoingSwipe?.maxY,
+		ongoingSwipe?.maxX,
+		ongoingSwipe?.offsetY,
+		ongoingSwipe?.offsetX,
+		prevTop,
+		prevLeft,
+	]);
+
+	useEffect(() => {
+		// snap to the previous position if old animation is still running
+		if (animating) {
+			setAnimating(false);
+			setStyle({
+				animation: isNew ? undefined : 'none',
+				transition: '',
+				top: prevTop,
+				left: prevLeft,
+			});
+		}
 
 		// then animate to the new position
 		requestAnimationFrame(() => {
+			setAnimating(true);
 			setStyle({
 				transition: 'top 0.2s ease, left 0.2s ease',
 				top: currentTop,
 				left: currentLeft,
 			});
 		});
+
+		const timeout = setTimeout(() => {
+			setAnimating(false);
+		}, 300);
+		return () => clearTimeout(timeout);
 	}, [data.position.col, data.position.row]);
 
 	useEffect(() => {

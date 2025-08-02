@@ -1,8 +1,9 @@
-import { type Board, Direction } from '2048-logic';
+import { type Board, Direction, mergeBoard } from '2048-logic';
 import type { ComponentChildren, FunctionComponent } from 'preact';
-import { useSwipeable } from 'react-swipeable';
+import { useMemo, useRef, useState } from 'preact/hooks';
+import { type SwipeEventData, useSwipeable } from 'react-swipeable';
 import { usePrevious } from '../../hooks/usePrevious.js';
-import getTileData from '../../utils/getTileData.js';
+import getTileData, { type TileData } from '../../utils/getTileData.js';
 import styles from './Board.module.css';
 import { EmptyTile, Tile } from './Tile.js';
 
@@ -10,6 +11,16 @@ interface Props {
 	boardState: Board;
 	overlay: ComponentChildren;
 	onSwipe?: (direction: Direction) => void;
+}
+
+export interface OngoingSwipe {
+	dir: Direction;
+	offsetX: string;
+	offsetY: string;
+	minX: string;
+	minY: string;
+	maxX: string;
+	maxY: string;
 }
 
 const swipeDirectionMap = {
@@ -24,6 +35,9 @@ export const BoardComponent: FunctionComponent<Props> = ({
 	overlay,
 	onSwipe,
 }) => {
+	const ref = useRef<HTMLDivElement>(null);
+	const [currentSwipeDir, setCurrentSwipeDir] = useState<Direction>();
+	const [currentSwipe, setCurrentSwipe] = useState<SwipeEventData>();
 	const previousBoardState = usePrevious(boardState);
 	const tileData = getTileData(boardState, previousBoardState);
 
@@ -32,8 +46,38 @@ export const BoardComponent: FunctionComponent<Props> = ({
 	const tileWidth = `${100 / cols}%`;
 	const tileHeight = `${100 / rows}%`;
 
+	const currentSwipeMergedBoardData = useMemo(() => {
+		if (currentSwipeDir) {
+			const mergedBoard = mergeBoard(boardState, currentSwipeDir)[0];
+			return getTileData(mergedBoard, boardState);
+		}
+	}, [currentSwipeDir, boardState]);
+
 	const swipeHandlers = useSwipeable({
-		onSwiping: (eventData) => onSwipe?.(swipeDirectionMap[eventData.dir]),
+		onSwipeStart: (eventData) => {
+			setCurrentSwipeDir(swipeDirectionMap[eventData.dir]);
+			setCurrentSwipe(eventData);
+		},
+		onSwiping: (eventData) => {
+			setCurrentSwipe(eventData);
+		},
+		onTouchEndOrOnMouseUp: () => {
+			if (
+				currentSwipe &&
+				onSwipe &&
+				(currentSwipe.velocity > 0.5 ||
+					(currentSwipeDir === Direction.UP && currentSwipe.deltaY < -50) ||
+					(currentSwipeDir === Direction.DOWN && currentSwipe.deltaY > 50) ||
+					(currentSwipeDir === Direction.LEFT && currentSwipe.deltaX < -50) ||
+					(currentSwipeDir === Direction.RIGHT && currentSwipe.deltaX > 50))
+			) {
+				if (currentSwipeDir) {
+					onSwipe(currentSwipeDir);
+				}
+			}
+			setCurrentSwipeDir(undefined);
+			setCurrentSwipe(undefined);
+		},
 		preventScrollOnSwipe: true,
 	});
 
@@ -48,7 +92,7 @@ export const BoardComponent: FunctionComponent<Props> = ({
 			{...swipeHandlers}
 		>
 			{overlay && <div className={styles.overlay}>{overlay}</div>}
-			<div className={styles.board}>
+			<div ref={ref} className={styles.board}>
 				{
 					/* Render empty tiles for the board */
 					Array.from({ length: rows }).flatMap((_, rowIndex) =>
@@ -72,9 +116,81 @@ export const BoardComponent: FunctionComponent<Props> = ({
 						data={tile}
 						tileHeight={tileHeight}
 						tileWidth={tileWidth}
+						ongoingSwipe={
+							currentSwipeDir &&
+							currentSwipe &&
+							currentSwipeMergedBoardData &&
+							calculateOngoingSwipeData(
+								currentSwipeDir,
+								currentSwipe,
+								tile,
+								currentSwipeMergedBoardData.find((t) => t.id === tile.id),
+								rows,
+								cols,
+								ref.current?.clientWidth || 0,
+								ref.current?.clientHeight || 0,
+								tileWidth,
+								tileHeight,
+							)
+						}
 					/>
 				))}
 			</div>
 		</div>
 	);
+};
+
+const calculateOngoingSwipeData = (
+	currentSwipeDir: Direction,
+	currentSwipe: SwipeEventData,
+	tile: TileData,
+	tileAfterMerge: TileData | undefined,
+	rows: number,
+	cols: number,
+	boardWidth: number,
+	boardHeight: number,
+	tileWidth: string,
+	tileHeight: string,
+): OngoingSwipe | undefined => {
+	let maxRow = tile.position.row,
+		minRow = tile.position.row,
+		maxCol = tile.position.col,
+		minCol = tile.position.col;
+
+	switch (currentSwipeDir) {
+		case Direction.UP: {
+			minRow = tileAfterMerge?.position.row ?? tile.position.row;
+			break;
+		}
+		case Direction.DOWN: {
+			maxRow = tileAfterMerge?.position.row ?? tile.position.row;
+			break;
+		}
+		case Direction.LEFT: {
+			minCol = tileAfterMerge?.position.col ?? tile.position.col;
+			break;
+		}
+		case Direction.RIGHT: {
+			maxCol = tileAfterMerge?.position.col ?? tile.position.col;
+			break;
+		}
+	}
+
+	const offsetY = `${(currentSwipe.deltaY * 100) / boardHeight}%`;
+	const offsetX = `${(currentSwipe.deltaX * 100) / boardWidth}%`;
+
+	const minY = `calc(${minRow} * ${tileHeight})`;
+	const maxY = `calc(100% - ${tileHeight} * ${rows - maxRow})`;
+	const minX = `calc(${minCol} * ${tileWidth})`;
+	const maxX = `calc(100% - ${tileWidth} * ${cols - maxCol})`;
+
+	return {
+		dir: currentSwipeDir,
+		offsetX,
+		offsetY,
+		minX,
+		minY,
+		maxX,
+		maxY,
+	};
 };
